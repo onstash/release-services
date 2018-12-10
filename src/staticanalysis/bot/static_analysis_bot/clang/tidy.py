@@ -188,7 +188,7 @@ class ClangTidy(object):
                 else:
                     issues.append(issue)
                     mode = issue.is_third_party() and '3rd party' or 'in-tree'
-                    logger.info('Found {} code issue {}'.format(mode, issue))
+                    logger.info('Found {} code issue {} (hash: {})'.format(mode, issue, issue.__hash__()))
 
             elif issues:
                 # Link notes to last problem

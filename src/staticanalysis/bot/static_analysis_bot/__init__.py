@@ -66,15 +66,16 @@ class Issue(abc.ABC):
         '''
         # Read issue related content here to build an hash
         full_path = os.path.join(settings.repo_dir, self.path)
-        assert os.path.exists(full_path), \
-            'Missing file {}'.format(full_path)
 
-        # Only read necessary lines
-        with open(full_path) as source:
-            start = max(self.line - 1, 0)
-            end = start + self.nb_lines
-            lines = itertools.islice(source, start, end)
-            content = ''.join(l.lstrip() for l in lines)
+        # HACK
+        if os.path.exists(full_path):
+            with open(full_path) as source:
+                start = max(self.line - 1, 0)
+                end = start + self.nb_lines
+                lines = itertools.islice(source, start, end)
+                content = ''.join(l.lstrip() for l in lines)
+        else:
+            content = 'dummy'
 
         # Build the content hash
         self.lines_hash = hashlib.sha256(content.encode('utf-8')).hexdigest()
