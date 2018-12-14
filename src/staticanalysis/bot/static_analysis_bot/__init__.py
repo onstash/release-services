@@ -3,6 +3,7 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
+from cli_common.log import get_logger
 from static_analysis_bot.config import settings
 from static_analysis_bot.config import Publication
 from static_analysis_bot.stats import Datadog
@@ -11,6 +12,8 @@ import hashlib
 import json
 import os
 import abc
+
+logger = get_logger(__name__)
 
 CLANG_TIDY = 'clang-tidy'
 CLANG_FORMAT = 'clang-format'
@@ -79,6 +82,9 @@ class Issue(abc.ABC):
 
         # Build the content hash
         self.lines_hash = hashlib.sha256(content.encode('utf-8')).hexdigest()
+
+        logger.info('DEBUG computed lines_hash', issue=self.__str__(), lines_hash=self.lines_hash, content=content)
+
         return self.lines_hash
 
     def build_extra_identifiers(self):
