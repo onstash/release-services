@@ -7,8 +7,9 @@ from datetime import datetime
 from datetime import timedelta
 from urllib.request import urlretrieve
 
-from bugbug import labels
-from bugbug import train
+from bugbug.models.bug import BugModel
+from bugbug.models.regression import RegressionModel
+from bugbug.models.tracking import TrackingModel
 
 from bugbug_train.secrets import secrets
 from cli_common.log import get_logger
@@ -35,19 +36,19 @@ class Trainer(object):
                 shutil.copyfileobj(input_f, output_f)
 
     def train_bug(self):
-        classes = labels.get_bugbug_labels(kind='bug', augmentation=True)
-        train.train(classes, model='bug.model')
-        self.compress_file('bug.model')
+        model = BugModel()
+        model.train()
+        self.compress_file('bugmodel')
 
     def train_regression(self):
-        classes = labels.get_bugbug_labels(kind='regression', augmentation=True)
-        train.train(classes, model='regression.model')
-        self.compress_file('regression.model')
+        model = RegressionModel()
+        model.train()
+        self.compress_file('regressionmodel')
 
     def train_tracking(self):
-        classes = labels.get_tracking_labels()
-        train.train(classes, model='tracking.model')
-        self.compress_file('tracking.model')
+        model = TrackingModel()
+        model.train()
+        self.compress_file('trackingmodel')
 
     def go(self):
         # Download datasets that were built by bugbug_data.

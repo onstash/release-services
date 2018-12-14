@@ -116,7 +116,6 @@ in skipOverrides {
     postInstall = ''
       ln -s ${self.en-core-web-sm}/lib/${python.__old.python.libPrefix}/site-packages/en_core_web_sm $out/lib/${python.__old.python.libPrefix}/site-packages/spacy/data/en
     '';
-    propagatedBuildInputs = old.propagatedBuildInputs ++ [ self.en-core-web-sm ];
   };
 
   "taskcluster-urls" = self: old: {
